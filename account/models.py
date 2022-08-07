@@ -22,7 +22,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     number = models.CharField(unique=True,max_length=10)
     name = models.CharField(max_length=255)
     image = models.ImageField(null=True,blank =True)
-    gender = models.CharField(max_length=255)
+    gender = models.CharField(max_length=255,choices=(('male','Male'),('female','Female'),('other','Other')))
     dob = models.DateField()
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)

@@ -14,7 +14,7 @@ from rest_framework.response import Response
 from rest_framework.schemas import ManualSchema
 from rest_framework.schemas import coreapi as coreapi_schema
 from rest_framework.views import APIView
-from rest_framework.authtoken import Token
+from rest_framework.authtoken.models import Token
 
 class ObtainAuthToken(APIView):
     throttle_classes = ()
