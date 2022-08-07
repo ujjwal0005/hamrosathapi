@@ -43,6 +43,7 @@ class DoctorProfile(models.Model):
     work_experience = models.CharField(max_length=255,null=True,blank=True)
     college_passed_outdate = models.DateField(null=True,blank=True)
     office_name = models.CharField(max_length=255,null=True,blank=True)
+    is_verified = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user
