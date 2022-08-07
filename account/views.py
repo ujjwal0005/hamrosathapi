@@ -74,16 +74,7 @@ def create_user(request):
     serializer = RegisterSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
-        user = serializer.data['id']
-        user = User.objects.get(id=user)
-        token = Token.objects.get_or_create(user=user)
-        serializer.data.pop('password',{})
-        serializer.data.pop('password2',{})
-        data={
-            'user':serializer.data,
-            'token':token
-        }
-        return Response(status=status.HTTP_201_CREATED)
+        return Response(serializer.data,status=status.HTTP_201_CREATED)
     print(serializer.errors)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

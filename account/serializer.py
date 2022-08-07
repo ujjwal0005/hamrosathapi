@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import User
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
-
+from rest_framework.authtoken.models import Token
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
             required=True,
@@ -25,6 +25,13 @@ class RegisterSerializer(serializers.ModelSerializer):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
         return attrs
+
+    def to_representation(self, instance):
+        user = super().to_representation(instance)
+        user.pop('password',{})
+        user.pop('password2',{})
+        token = Token.objects.get_or_create(user=instance)
+        return {'user':user,'token':token}
 
     def create(self, validated_data):
         user = User.objects.create(
