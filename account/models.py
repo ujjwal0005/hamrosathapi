@@ -1,3 +1,4 @@
+from distutils.command.upload import upload
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 # Create your models here.
@@ -26,6 +27,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    is_doctor = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['number','name','gender','dob']
@@ -35,12 +37,12 @@ class User(AbstractBaseUser,PermissionsMixin):
     def __str__(self):
         return self.email
 
-class detail(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    qualification_certificate = models.ImageField()
-    workexperience = models.CharField(max_length=255)
-    college_passed_outdate = models.DateField()
-    office_name = models.CharField(max_length=255)
+class DoctorProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE,related_name='doctor_profile',primary_key=True)
+    qualification_certificate = models.ImageField(upload_to='',null=True,blank=True)
+    work_experience = models.CharField(max_length=255,null=True,blank=True)
+    college_passed_outdate = models.DateField(null=True,blank=True)
+    office_name = models.CharField(max_length=255,null=True,blank=True)
 
     def __str__(self):
         return self.user

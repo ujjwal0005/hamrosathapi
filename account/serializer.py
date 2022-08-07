@@ -14,7 +14,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('name', 'password', 'password2', 'email', 'number','gender','dob','image')
+        fields = ('name', 'password', 'password2', 'email', 'number','gender','dob','image','is_doctor')
         extra_kwargs = {
             'number': {'required': True},
             'name': {'required': True},
@@ -33,6 +33,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             email=validated_data['email'],
             gender=validated_data['gender'],
             dob=validated_data['dob'],
+            is_doctor = validated_data['is_doctor'],
+            is_active=True
         )
 
         user.set_password(validated_data['password'])
@@ -41,6 +43,11 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 class updateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('name','email', 'number','gender','dob','image')
+        
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('name','email', 'number','gender','dob','image')

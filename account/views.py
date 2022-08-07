@@ -1,9 +1,9 @@
-from functools import partial
-from django.shortcuts import render
-from rest_framework.decorators import api_view
+from django.contrib.auth import logout
+from rest_framework.decorators import api_view,permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from .serializer import RegisterSerializer,updateUserSerializer
+from .serializer import RegisterSerializer,updateUserSerializer,UserSerializer
 from .models import User
 from rest_framework import status
 from rest_framework import parsers, renderers
@@ -64,7 +64,7 @@ class ObtainAuthToken(APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key,'counseller':user.is_staff})
+        return Response({'token': token.key,'counseller':user.is_doctor})
 
 
 obtain_auth_token = ObtainAuthToken.as_view()
@@ -75,6 +75,7 @@ def create_user(request):
     if serializer.is_valid():
         serializer.save()
         return Response(status=status.HTTP_201_CREATED)
+    print(serializer.errors)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
@@ -90,4 +91,16 @@ def update_user(request,pk):
         return Response(status=status.HTTP_202_ACCEPTED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# @api_view
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def _logout(request):
+    logout(request)
+    return Response({
+        'message':'logout successfully'
+    })
+
+
+@api_view(['GET'])
+def current_user(request):
+    serializer = UserSerializer(request.user)
+    return Response(serializer.data)

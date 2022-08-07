@@ -16,11 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from account import views as account
-from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/',account.create_user),
     path('updateuser/<int:pk>',account.update_user),
     path('login/',account.obtain_auth_token, name='api_token_auth'),
+    path('logout/',account.logout, name='logout'),
+    path('userprofile/',account.current_user,name='userprofile')
 ]
