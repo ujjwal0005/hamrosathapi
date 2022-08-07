@@ -31,7 +31,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.pop('password',{})
         user.pop('password2',{})
         token,_ = Token.objects.get_or_create(user=instance)
-        user['token']=token
+        user['token']=token.key
         return user
 
     def create(self, validated_data):
