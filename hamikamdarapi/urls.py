@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from account import views as account
+from Blog import views as blog
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -23,5 +24,9 @@ urlpatterns = [
     path('updateuser/<int:pk>',account.update_user),
     path('login/',account.obtain_auth_token, name='api_token_auth'),
     path('logout/',account.logout, name='logout'),
-    path('userprofile/',account.current_user,name='userprofile')
+    path('userprofile/',account.current_user,name='userprofile'),
+    path('blog/',blog.create_blog,name='create_blog'),
+    path('blog/<int:id>/',blog.update_blog,name='update_blog'),
+    path('blogs/',blog.get_blogs,name='get_blog'),
+    path('userblogs/',blog.get_userblog,name='user_blog'),
 ]

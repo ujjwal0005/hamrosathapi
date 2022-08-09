@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializer import RegisterSerializer,updateUserSerializer,UserSerializer
 from .models import User
-from rest_framework import status
 from rest_framework import parsers, renderers
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.serializers import AuthTokenSerializer
@@ -101,6 +100,7 @@ def _logout(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def current_user(request):
     serializer = UserSerializer(request.user)
     return Response(serializer.data)
