@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view,permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from .serializer import RegisterSerializer,updateUserSerializer,UserSerializer
+from .serializer import DoctorProfileSerializer, RegisterSerializer,updateUserSerializer,UserSerializer
 from .models import User
 from rest_framework import parsers, renderers
 from rest_framework.authtoken.models import Token
@@ -78,12 +78,9 @@ def create_user(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
-def update_user(request,pk):
-    try:
-        user = User.objects.get(pk=pk)
-    except User.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
+@permission_classes([IsAuthenticated])
+def update_user(request):
+    user=request.user
     serializer = updateUserSerializer(instance=user,data=request.data,partial=True)
     if serializer.is_valid():
         serializer.save()
@@ -98,9 +95,31 @@ def _logout(request):
         'message':'logout successfully'
     })
 
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def current_user(request):
     serializer = UserSerializer(request.user)
     return Response(serializer.data)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def doctor_profileedit(request):
+    user = request.user
+    if not user.is_doctor:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+    serializer = DoctorProfileSerializer(instance=user.doctor_profile,data=request.data,partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def doctor_profile(request):
+    user = request.user
+    if not user.is_doctor:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+    serializer = DoctorProfileSerializer(user.doctor_profile)
+    return Response(serializer.data)
+
+

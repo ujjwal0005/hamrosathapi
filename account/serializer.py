@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import DoctorProfile, User
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.authtoken.models import Token
@@ -48,15 +48,23 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
 
+        if validated_data['is_doctor'] is True:
+            DoctorProfile.objects.create(user=user)
         return user
 
 class updateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('name','email', 'number','gender','dob','image')
+class DoctorProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DoctorProfile
+        fields = '__all__'
+        read_pnly_fields = ('is_verified',)
         
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('name','email', 'number','gender','dob','image')
+
         
