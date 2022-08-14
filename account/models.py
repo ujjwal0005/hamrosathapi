@@ -35,7 +35,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     objects = CustomAccountManager()
 
     def __str__(self):
-        return self.email
+        return f'{self.email}'
 
 class DoctorProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE,related_name='doctor_profile',primary_key=True)
