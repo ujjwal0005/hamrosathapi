@@ -11,11 +11,15 @@ class CommentSerializer(serializers.ModelSerializer):
         }
 
 class BlogSerializer(serializers.ModelSerializer):
-     image = serializers.ImageField(max_length=None, use_url=True)
-     class Meta:
+    image_url = serializers.SerializerMethodField('get_image_url')
+
+    class Meta:
         model = Blog
-        fields = ('id','user','title','content','image')
+        fields = ('id','user','title','content','image','image_url')
         extra_kwargs = {
             'title': {'required': True},
             'content': {'required': True},
         }
+
+    def get_image_url(self, obj):
+        return obj.image.url
