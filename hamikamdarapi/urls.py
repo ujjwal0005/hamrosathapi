@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from account import views as account
 from Blog import views as blog
+from Appointment import views as appointment
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,6 +32,7 @@ urlpatterns = [
     # doctorprofile
     path('doctorprofile/',account.doctor_profile,name='doctorprofile'),
     path('doctorprofile/update/',account.doctor_profileedit, name='updatedoctorprofile'),
+    path('getdoctors/',account.get_doctors,name='getdoctors'),
 
     # blogs
     path('blog/',blog.create_blog,name='create_blog'),
@@ -38,4 +40,9 @@ urlpatterns = [
     path('blogs/',blog.get_blogs,name='get_blog'),
     path('userblogs/',blog.get_userblog,name='user_blog'),
 
+    #appointment
+    path('appointment/',appointment.create_appointment,name='appointment'),
+    path('userappointment/', appointment.user_appointment,name='user_appointment'),
+    path('doctorappointment/', appointment.doctor_appointment,name='doctor_appointment'),
+    path('userappointment/<int:id>/', appointment.update_appointment,name='update_appointment'),
 ]

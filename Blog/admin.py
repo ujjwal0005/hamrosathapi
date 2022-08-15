@@ -9,7 +9,7 @@ class BlogAdmin(admin.ModelAdmin):
     # form_class = CustomUserCreationForm
     list_display=['id','user','title']
     list_display_links=['id','title',]
-    ordering = ['id']
+    ordering = ['-id']
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):

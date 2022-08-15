@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view,permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from .serializer import DoctorProfileSerializer, RegisterSerializer,updateUserSerializer,UserSerializer
+from .serializer import DoctorProfileSerializer, DoctorSerializer, RegisterSerializer,updateUserSerializer,UserSerializer
 from .models import User
 from rest_framework import parsers, renderers
 from rest_framework.authtoken.models import Token
@@ -84,7 +84,7 @@ def update_user(request):
     serializer = updateUserSerializer(instance=user,data=request.data,partial=True)
     if serializer.is_valid():
         serializer.save()
-        return Response(status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.data,status=status.HTTP_202_ACCEPTED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
@@ -110,7 +110,7 @@ def doctor_profileedit(request):
     serializer = DoctorProfileSerializer(instance=user.doctor_profile,data=request.data,partial=True)
     if serializer.is_valid():
         serializer.save()
-        return Response(status=status.HTTP_200_OK)
+        return Response(serializer.data,status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
@@ -120,6 +120,14 @@ def doctor_profile(request):
     if not user.is_doctor:
         return Response(status=status.HTTP_403_FORBIDDEN)
     serializer = DoctorProfileSerializer(user.doctor_profile)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_doctors(request):
+    doctors = User.objects.prefetch_related('doctor_profile').filter(is_doctor=True,doctor_profile__is_verified = True)
+    # print(doctors.query)
+    serializer = DoctorSerializer(doctors,many=True)
     return Response(serializer.data)
 
 

@@ -60,11 +60,16 @@ class DoctorProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = DoctorProfile
         fields = '__all__'
-        read_pnly_fields = ('is_verified',)
+        read_only_fields = ('is_verified',)
         
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('name','email', 'number','gender','dob','image')
+class DoctorSerializer(serializers.ModelSerializer):
+    doctor_profile = DoctorProfileSerializer(read_only=True)
+    class Meta:
+        model = User
+        fields = ('name','email', 'number','gender','dob','image','doctor_profile')
 
         
