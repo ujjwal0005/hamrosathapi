@@ -5,8 +5,8 @@ from django.db import models
 class Blog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,related_name='blog')
     image = models.ImageField(upload_to='media',null=True,blank=True)
-    title = models.CharField(max_length=255,null=True,blank=True)
-    content = models.TextField(null=True,blank=True)
+    title = models.CharField(max_length=255)
+    content = models.TextField()
     is_verified = models.BooleanField(default=True)
 
     def __str__(self):
@@ -15,7 +15,7 @@ class Blog(models.Model):
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,related_name='blog_comment')
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE,related_name='blog_comment')
-    comment = models.TextField(null=True,blank=True)
+    comment = models.TextField()
     is_verified = models.BooleanField(default=True)
 
     def __str__(self):
