@@ -18,6 +18,8 @@ from django.urls import path
 from account import views as account
 from Blog import views as blog
 from Appointment import views as appointment
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -45,4 +47,4 @@ urlpatterns = [
     path('userappointment/', appointment.user_appointment,name='user_appointment'),
     path('doctorappointment/', appointment.doctor_appointment,name='doctor_appointment'),
     path('userappointment/<int:id>/', appointment.update_appointment,name='update_appointment'),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
