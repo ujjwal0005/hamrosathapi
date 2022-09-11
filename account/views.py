@@ -130,4 +130,12 @@ def get_doctors(request):
     serializer = DoctorSerializer(doctors,many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getdoctorID(request,id):
+    doctors = User.objects.prefetch_related('doctor_profile').filter(is_doctor=True,id=id,doctor_profile__is_verified = True).first()
+    serializer = DoctorSerializer(doctors)
+    return Response(serializer.data)
+    
+
 

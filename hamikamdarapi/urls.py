@@ -35,6 +35,7 @@ urlpatterns = [
     path('doctorprofile/',account.doctor_profile,name='doctorprofile'),
     path('doctorprofile/update/',account.doctor_profileedit, name='updatedoctorprofile'),
     path('getdoctors/',account.get_doctors,name='getdoctors'),
+    path('getdoctor/<int:id>/', account.getdoctorID,name='getdoctor'),
 
     # blogs
     path('blog/',blog.create_blog,name='create_blog'),
